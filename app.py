@@ -1,16 +1,15 @@
 from flask import Flask, render_template, request, url_for, redirect
 from flask_sqlalchemy import SQLAlchemy
 
-
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False #não está no tutorial, coloquei a linha para parar o erro
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False #não está no tutorial, coloquei a linha para parar o erro ao inicializar o servidor
 
 db = SQLAlchemy(app)
 
 class Pessoa(db.Model):
 
-    __tablename__= 'cliente'
+    __tablename__ = 'cliente'
 
     _id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     nome = db.Column(db.String)
@@ -29,6 +28,40 @@ db.create_all()
 @app.route('/index')
 def index():
     return render_template('index.html')
+
+@app.route('/cadastrar')
+def cadastrar():
+    return render_template('cadastro.html')
+
+@app.route('/cadastro', methods=['GET', 'POST'])
+def cadastro():
+    if request.method == 'POST':
+        nome = request.form.get('nome')
+        telefone = request.form.get('telefone')
+        cpf = request.form.get('cpf')
+        email = request.form.get('email')
+
+        if nome and telefone and cpf and email:
+            p = Pessoa(nome, telefone, cpf, email)
+            db.session.add(p)
+            db.session.commit()
+
+    return redirect(url_for('index'))
+
+@app.route('/lista')
+def lista():
+    pessoas = Pessoa.query.all()
+    return render_template('lista.html', pessoas=pessoas)
+
+@app.route('/excluir/<int:id>')
+def excluir(id):
+    pessoa = Pessoa.query.filter_by(_id=id).first()
+
+    db.session.delete(pessoa)
+    db.session.commit()
+
+    pessoas = Pessoa.query.all() #duas linhas para retornar a página da lista após a exclusão
+    return render_template('lista.html', pessoas=pessoas)
 
 if __name__ == '__main__':
     app.run(debug=True)
