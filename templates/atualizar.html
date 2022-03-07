@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Atualizar</title>
+</head>
+<body>
+    <h1>Atualizar</h1>
+    <hr>
+    <form action="" method="POST">
+        <table>
+            <tr>
+                <td>Nome</td>
+                <td><input type="text" name="nome" value="{{ pessoa.nome }}"></td>
+            </tr>
+            <tr>
+                <td>Telefone</td>
+                <td><input type="text" name="telefone" value="{{ pessoa.telefone }}"></td>
+            </tr>
+            <tr>
+                <td>E-mail</td>
+                <td><input type="text" name="email" value="{{ pessoa.email }}"></td>
+            </tr>
+        </table><br>
+        <input type="submit" value="Atualizar Dados">
+    </form><br>
+    <a href="/index">Voltar</a>
+</body>
+</html>
