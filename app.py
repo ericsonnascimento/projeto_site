@@ -1,12 +1,12 @@
-from flask import Flask, render_template, request, url_for, redirect
+from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask import render_template, request, url_for, redirect
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False #não está no tutorial, coloquei a linha para parar o erro ao inicializar o servidor
 
 db = SQLAlchemy(app)
-
 
 class Pessoa(db.Model):
 
@@ -24,9 +24,7 @@ class Pessoa(db.Model):
         self.cpf = cpf
         self.email = email
 
-
 db.create_all()
-
 
 @app.route('/index')
 def index():
